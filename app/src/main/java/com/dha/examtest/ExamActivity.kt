@@ -105,14 +105,6 @@ private fun ModeSwitch(viewModel: QuizViewModel) {
         if (viewModel.isCheckMode) {
             Text(text = "Điểm: ${viewModel.score.value}")
         }
-        Text(modifier = Modifier
-            .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(8.dp))
-            .padding(horizontal = 10.dp, vertical = 5.dp)
-            .combinedClickable(
-            onLongClick = { viewModel.reset() },
-            onClick = {  }
-        ), text = "Reset",
-            color = MaterialTheme.colorScheme.onPrimary)
         Switch(
             checked = viewModel.isCheckMode,
             onCheckedChange = { viewModel.toggleMode() }
