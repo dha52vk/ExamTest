@@ -41,7 +41,9 @@ fun MCQuestionItem(
 
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
         ) {
             question.options.forEachIndexed { index, option ->
                 val isSelected = if (isCheckMode) checkAnswer == index else practiceAnswer == index
