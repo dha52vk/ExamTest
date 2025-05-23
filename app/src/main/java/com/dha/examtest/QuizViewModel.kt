@@ -17,9 +17,9 @@ class QuizViewModel : ViewModel() {
 
     var phoDiem: Triple<Float, List<Float>, Float> = Triple(0.25F, listOf(0.1F,0.25F,0.5F,1F), 0.25F);
     val score = mutableStateOf("")
-    val mcQuiz = mutableIntStateOf(18);
-    val tfQuiz = mutableIntStateOf(4);
-    val saQuiz = mutableIntStateOf(4);
+    val mcQuiz = mutableIntStateOf(0);
+    val tfQuiz = mutableIntStateOf(0);
+    val saQuiz = mutableIntStateOf(0);
     // Answers storage
     private val _mcPracticeAnswers = mutableStateMapOf<Int, Int>()
     private val _mcCheckAnswers = mutableStateMapOf<Int, Int>()
