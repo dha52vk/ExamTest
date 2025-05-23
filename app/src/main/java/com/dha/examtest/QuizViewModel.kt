@@ -100,10 +100,6 @@ class QuizViewModel : ViewModel() {
             .replace('_', '-') // Thay khoảng trắng và _ thành dấu gạch ngang
     }
 
-    fun isNotEmpty(): Boolean{
-        return _mcPracticeAnswers.isNotEmpty() || _tfPracticeAnswers.isNotEmpty() || _saPracticeAnswer.isNotEmpty()
-    }
-
     fun getScore(): Float {
         val mcScore = phoDiem.first
         val tfScore = phoDiem.second
@@ -124,7 +120,6 @@ class QuizViewModel : ViewModel() {
                 val correct = subIds.count() { subId ->
                     _tfPracticeAnswers[subId] == _tfCheckAnswers[subId]
                 }
-                Log.d("viewmodel", "$_id $correct")
                 if (correct == 0) 0.0 else tfScore[correct-1].toDouble()
             }.toFloat()
 
@@ -134,7 +129,6 @@ class QuizViewModel : ViewModel() {
                 value == _saCheckAnswer[key]
             }.count() * saScore
         score.value = (mcTotal + tfTotal + saTotal).toString()
-        Log.d("viewmodel", "$mcTotal $tfTotal $saTotal")
         return mcTotal + tfTotal + saTotal
     }
 
