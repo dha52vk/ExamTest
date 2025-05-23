@@ -25,11 +25,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.dha.examtest.ui.theme.ExamTestTheme
+import kotlinx.coroutines.delay
+import java.util.Locale
 
 class ExamActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +47,12 @@ class ExamActivity : ComponentActivity() {
                     val viewModel = QuizViewModel()
                     viewModel.parent = this.filesDir
                     viewModel.loadQuiz(intent.getStringExtra("exam") ?: "")
+                    LaunchedEffect(true) {
+                        while (true){
+                            delay(1000)
+                            viewModel.time.longValue++
+                        }
+                    }
                     ExamScreen(viewModel)
                 }
             }
@@ -104,6 +116,17 @@ private fun ModeSwitch(viewModel: QuizViewModel) {
         Text(text = if (viewModel.isCheckMode) "Chế độ kiểm tra" else "Chế độ làm bài")
         if (viewModel.isCheckMode) {
             Text(text = "Điểm: ${viewModel.score.value}")
+        }else {
+            Text(
+                text = "Thời gian: ${
+                    String.format(
+                        Locale.getDefault(),
+                        "%02d:%02d",
+                        viewModel.time.longValue / 60,
+                        viewModel.time.longValue % 60
+                    )
+                }"
+            )
         }
         Switch(
             checked = viewModel.isCheckMode,

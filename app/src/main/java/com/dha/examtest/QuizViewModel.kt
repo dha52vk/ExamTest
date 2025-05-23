@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -25,6 +26,7 @@ class QuizViewModel : ViewModel() {
     private val examTitle = mutableStateOf("")
     var phoDiem: Triple<Float, List<Float>, Float> = Triple(0.25F, listOf(0.1F,0.25F,0.5F,1F), 0.25F)
     val score = mutableStateOf("0")
+    val time = mutableLongStateOf(0L)
     val mcQuiz = mutableIntStateOf(0)
     val tfQuiz = mutableIntStateOf(0)
     val saQuiz = mutableIntStateOf(0)
@@ -136,6 +138,7 @@ class QuizViewModel : ViewModel() {
         val quiz = QuizData(
             title = examTitle.value,
             phoDiem = phoDiem,
+            time = time.longValue,
             mcQuiz = mcQuiz.intValue,
             tfQuiz = tfQuiz.intValue,
             saQuiz = saQuiz.intValue,
@@ -165,6 +168,7 @@ class QuizViewModel : ViewModel() {
         val quizData = Gson().fromJson(json, QuizData::class.java)
         examTitle.value = quizData.title
         phoDiem = quizData.phoDiem
+        time.longValue = quizData.time
         mcQuiz.intValue = quizData.mcQuiz
         tfQuiz.intValue = quizData.tfQuiz
         saQuiz.intValue = quizData.saQuiz
@@ -192,6 +196,7 @@ enum class AnswerState {
 data class QuizData(
     val title: String,
     val phoDiem: Triple<Float, List<Float>, Float>,
+    val time: Long,
     val mcQuiz: Int,
     val tfQuiz: Int,
     val saQuiz: Int,
