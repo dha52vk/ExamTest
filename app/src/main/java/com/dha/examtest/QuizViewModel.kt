@@ -12,6 +12,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import java.io.File
+import java.io.FileNotFoundException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -39,6 +40,7 @@ class QuizViewModel : ViewModel() {
     private val _saCheckAnswer = mutableStateMapOf<Int,String>()
 
     fun toggleMode() = viewModelScope.launch { isCheckMode = !isCheckMode }
+    fun toggleMode(checkMode: Boolean) = viewModelScope.launch { isCheckMode = checkMode }
 
     fun reset(){
         _mcPracticeAnswers.clear()
@@ -163,7 +165,10 @@ class QuizViewModel : ViewModel() {
     fun loadQuiz(fileName: String){
         this.fileName = fileName
         val file = File(parent, fileName)
-        if (!file.exists()) return
+        if (!file.exists()) {
+            this.fileName = ""
+            throw FileNotFoundException("File $fileName not found")
+        }
         val json = file.readText()
         val quizData = Gson().fromJson(json, QuizData::class.java)
         examTitle.value = quizData.title

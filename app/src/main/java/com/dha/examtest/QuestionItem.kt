@@ -9,10 +9,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -98,7 +100,12 @@ fun TFQuestionItem(
                             text = "Chưa làm",
                             isSelected = currentAnswer == AnswerState.UNANSWERED,
                             color = Color.Gray,
-                            onClick = { viewModel.setTfAnswer(subQuestion.id, AnswerState.UNANSWERED) }
+                            onClick = {
+                                viewModel.setTfAnswer(
+                                    subQuestion.id,
+                                    AnswerState.UNANSWERED
+                                )
+                            }
                         )
 
                         AnswerOption(
@@ -144,10 +151,12 @@ fun SAQuestionItem(
             .background(getBackgroundColor(isCheckMode, currentAnswer, compareAnswer))
             .padding(16.dp)
     ) {
+        Text(text = question.title)
         NumberTextField(
+            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
             value = currentAnswer,
             onValueChange = { viewModel.setSaAnswer(question.id, it) },
-            label = { Text(text = question.title) }
+            label = { "" }
         )
 
         // Hiển thị đáp án đúng khi ở chế độ kiểm tra
@@ -158,17 +167,14 @@ fun SAQuestionItem(
                 modifier = Modifier.padding(top = 4.dp)
             )
         }
-//        Text(text = question.title, style = MaterialTheme.typography.bodyLarge)
-//        TextField(
-//            value = currentAnswer,
-//            onValueChange = { viewModel.setSaAnswer(question.id, it) },
-//            modifier = Modifier.fillMaxWidth()
-//        )
+        HorizontalDivider(modifier = Modifier.height(2.dp),
+            color = MaterialTheme.colorScheme.primary,
+            thickness = 2.dp)
     }
 }
 
 @Composable
-private fun AnswerOption(
+fun AnswerOption(
     text: String,
     isSelected: Boolean,
     color: Color,

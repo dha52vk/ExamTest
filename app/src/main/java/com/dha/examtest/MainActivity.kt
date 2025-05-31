@@ -17,9 +17,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -52,6 +55,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.dha.examtest.ui.theme.ExamTestTheme
 
@@ -68,22 +72,29 @@ class MainActivity : ComponentActivity() {
                     NavItem("Lịch sử", Icons.Filled.DateRange)
                 )
 
-                Scaffold(
-                    bottomBar = {
-                        NavigationBar() {
-                            items.forEachIndexed { index, item ->
-                                NavigationBarItem(
-                                    icon = { Icon(item.icon, contentDescription = item.title) },
-                                    label = { Text(item.title) },
-                                    selected = selectedIndex == index,
-                                    onClick = { selectedIndex = index }
-                                )
-                            }
+                Scaffold(bottomBar = {
+                    NavigationBar() {
+                        items.forEachIndexed { index, item ->
+                            NavigationBarItem(
+                                icon = { Icon(item.icon, contentDescription = item.title) },
+                                label = { Text(item.title) },
+                                selected = selectedIndex == index,
+                                onClick = { selectedIndex = index }
+                            )
                         }
                     }
+                }
                 ) { innerPadding ->
                     // Nội dung màn hình theo tab chọn
-                    Column(modifier = Modifier.padding(innerPadding)) {
+                    Column(
+                        modifier = Modifier.padding(
+                            top = innerPadding.calculateTopPadding(),
+                            bottom = maxOf(
+                                innerPadding.calculateBottomPadding(),
+                                WindowInsets.ime.asPaddingValues().calculateBottomPadding()
+                            )
+                        )
+                    ) {
                         when (selectedIndex) {
                             0 -> CreateExamScreen()
                             1 -> HistoryExamScreen()
@@ -143,7 +154,9 @@ fun HistoryExamScreen() {
                                 }
                             )
                             .padding(horizontal = 20.dp, vertical = 5.dp),
-                        text = exam.nameWithoutExtension)
+                        text = exam.nameWithoutExtension,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis)
                     HorizontalDivider(
                         modifier = Modifier.height(2.dp),
                         color = MaterialTheme.colorScheme.primary
@@ -226,7 +239,11 @@ fun CreateExamScreen() {
             form = ExamForm(12, 4, 6, 0.25F, listOf(0.1F, 0.25F, 0.5F, 1F), 0.5F)
         ),
         ExamTemplateItem(
-            title = "Lý, Hóa (18-4-6)",
+            title = "Lý (18-4-6)",
+            form = ExamForm(18, 4, 6, 0.25F, listOf(0.1F, 0.25F, 0.5F, 1F), 0.25F)
+        ),
+        ExamTemplateItem(
+            title = "Hóa (18-4-6)",
             form = ExamForm(18, 4, 6, 0.25F, listOf(0.1F, 0.25F, 0.5F, 1F), 0.25F)
         ),
         ExamTemplateItem(
@@ -285,7 +302,9 @@ fun CreateExamScreen() {
                 modifier = textFieldModifier,
                 value = examTitle.value,
                 onValueChange = { examTitle.value = it },
-                label = { Text(text = "Nhập tiêu đề đề thi") })
+                label = { Text(text = "Nhập tiêu đề đề thi") },
+                singleLine = true
+            )
             NumberTextField(
                 modifier = textFieldModifier,
                 value = mcQuiz.value,
