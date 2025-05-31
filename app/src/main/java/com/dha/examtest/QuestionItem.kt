@@ -7,12 +7,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -40,20 +37,23 @@ fun MCQuestionItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp)
+                //.border(2.dp, Color.Gray).padding(2.dp)
         ) {
             question.options.forEachIndexed { index, option ->
                 val isSelected = if (isCheckMode) checkAnswer == index else practiceAnswer == index
                 val isCorrect = checkAnswer == index
                 val isPractice = practiceAnswer == index
 
-                CustomRadioButton(
-                    label = option,
-                    isSelected = isSelected,
-                    isCorrectAnswer = isCorrect,
-                    isPracticeAnswer = isPractice,
-                    isCheckMode = isCheckMode,
-                    onSelect = { viewModel.setMcAnswer(question.id, index) }
-                )
+                Box (modifier = Modifier.weight(1f).padding(horizontal = 3.dp)){
+                    McQuizRadioButton(
+                        label = option,
+                        isSelected = isSelected,
+                        isCorrectAnswer = isCorrect,
+                        isPracticeAnswer = isPractice,
+                        isCheckMode = isCheckMode,
+                        onSelect = { viewModel.setMcAnswer(question.id, index) }
+                    )
+                }
             }
         }
     }
@@ -153,7 +153,9 @@ fun SAQuestionItem(
     ) {
         Text(text = question.title)
         NumberTextField(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 5.dp),
             value = currentAnswer,
             onValueChange = { viewModel.setSaAnswer(question.id, it) },
             label = { "" }
@@ -167,9 +169,11 @@ fun SAQuestionItem(
                 modifier = Modifier.padding(top = 4.dp)
             )
         }
-        HorizontalDivider(modifier = Modifier.height(2.dp),
+        HorizontalDivider(
+            modifier = Modifier.height(2.dp),
             color = MaterialTheme.colorScheme.primary,
-            thickness = 2.dp)
+            thickness = 2.dp
+        )
     }
 }
 
@@ -213,7 +217,7 @@ private fun getTfBackgroundColor(
 }
 
 @Composable
-private fun CustomRadioButton(
+private fun McQuizRadioButton(
     label: String,
     isSelected: Boolean,
     isCorrectAnswer: Boolean,
@@ -249,24 +253,19 @@ private fun CustomRadioButton(
 
     Box(
         modifier = Modifier
-            .size(50.dp)
+            .fillMaxWidth()
             .clickable(onClick = onSelect)
-            .border(2.dp, borderColor, CircleShape)
+            .border(2.dp, borderColor, RoundedCornerShape(5.dp))
+            .background(backgroundColor)
+            .padding(10.dp),
+        contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(backgroundColor, CircleShape)
-                .padding(4.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = label,
-                color = textColor,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
-        }
+        Text(
+            text = label,
+            color = textColor,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp
+        )
     }
 }
 

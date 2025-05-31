@@ -17,7 +17,7 @@ fun NumberTextField(
         modifier = modifier,
         value = value,
         onValueChange = { newValue ->
-            val filtered = newValue.filter { it.isDigit() || it == '.' || it == '-' || it == ',' }
+            val filtered = newValue.filter { it.isDigit() || it == '.' || it == '-' }
 
             // Validation checks
             val hasMinus = filtered.startsWith('-')
